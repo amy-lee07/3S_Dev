@@ -1,38 +1,61 @@
-﻿using Filmes.WebAPI.Intterface;
+﻿using Filmes.WebAPI.BdContextFilme;
+using Filmes.WebAPI.Intterface;
 using Filmes.WebAPI.Models;
 
-namespace Filmes.WebAPI.Repositories
+namespace Filmes.WebAPI.Repositories;
+
+public class FilmeRepository : IFilmeRepository
 {
-    public class FilmeRepository : IFilmeRepository
+    private readonly FilmeContext _context;
+    public FilmeRepository(FilmeContext context)
     {
-        public void AtualizarIdCorpo(Filme filmeAtualizado)
-        {
-            throw new NotImplementedException();
-        }
+        _context = context;
+    }
 
-        public void AtualizarIdUrl(Guid id, Filme filmeatualizado)
-        {
-            throw new NotImplementedException();
-        }
+    public void AtualizarIdCorpo(Filme filmeAtualizado)
+    {
+        throw new NotImplementedException();
+    }
 
-        public Filme BuscarPorId(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+    public void AtualizarIdUrl(Guid id, Filme filmeatualizado)
+    {
+        throw new NotImplementedException();
+    }
 
-        public void Cadastrar(Filme novoFilme)
-        {
-            throw new NotImplementedException();
-        }
+    public Filme BuscarPorId(Guid id)
+    {
+        throw new NotImplementedException();
+    }
 
-        public void Deletar(Guid id)
+    public void Cadastrar(Filme novoFilme)
+    {
+        try
         {
-            throw new NotImplementedException();
+            novoFilme.IdFilme = Guid.NewGuid().ToString();
+            _context.Filmes.Add(novoFilme);
+            _context.SaveChanges();
         }
-
-        public List<Filme> Listar()
+        catch (Exception)
         {
-            throw new NotImplementedException();
+            throw;
+        }
+    }
+
+    public void Deletar(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public List<Filme> Listar()
+    {
+        try
+        {
+            List<Filme> listaFilmes = _context.Filmes.ToList();
+            return listaFilmes;
+        }
+        catch (Exception)
+        {
+            throw;
         }
     }
 }
