@@ -12,7 +12,7 @@ public partial class Presenca
     [Key]
     public Guid IdPresenca { get; set; }
 
-    public bool Situcao { get; set; }
+    public bool Situacao { get; set; }
 
     public Guid? IdUsuario { get; set; }
 

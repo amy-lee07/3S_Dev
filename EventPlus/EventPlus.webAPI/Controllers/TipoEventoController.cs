@@ -80,10 +80,16 @@ public class TipoEventoController : ControllerBase
     /// <param name="tipoEvento">tipo de evento com os dados atualizados</param>
     /// <returns>status code 204 e o tipo de evento atualizado</returns>
     [HttpPut("{id}")]
-    public IActionResult Atualizar (Guid id, TipoEvento tipoEvento)
+    public IActionResult Atualizar (Guid id, TipoEventoDTO tipoEvento)
     {
+ 
         try
         {
+            var tipoEventoAtualizado = new TipoEvento
+            {
+
+                Titulo = tipoEvento.Titulo
+            };
             _tipoEventoRepository.Atualizar(id, tipoEvento);
             return StatusCode(204, tipoEvento);
         }

@@ -1,4 +1,5 @@
-﻿using EventPlus.webAPI.Models;
+﻿using EventPlus.webAPI.DTO;
+using EventPlus.webAPI.Models;
 namespace EventPlus.webAPI.Interfaces;
 
     public interface ITipoEventoRepository
@@ -8,5 +9,6 @@ namespace EventPlus.webAPI.Interfaces;
         void Atualizar(Guid id, TipoEvento tipoEvento);
         void Deletar(Guid id);
             TipoEvento BuscarPorId(Guid id);
-    }
+    void Atualizar(Guid id, TipoEventoDTO tipoEvento);
+}
 

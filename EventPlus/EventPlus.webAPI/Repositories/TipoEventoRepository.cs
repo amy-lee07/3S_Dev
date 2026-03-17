@@ -1,4 +1,6 @@
-﻿using EventPlus.webAPI.BdContextEvent;
+﻿
+using EventPlus.webAPI.BdContextEvent;
+using EventPlus.webAPI.DTO;
 using EventPlus.webAPI.Interfaces;
 using EventPlus.webAPI.Models;
 
@@ -26,6 +28,12 @@ public class TipoEventoRepository : ITipoEventoRepository
             _context.SaveChanges();
         }
     }
+
+    public void Atualizar(Guid id, TipoEventoDTO tipoEvento)
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     /// Busca um tipo de evento por id, rastreamento automatico
     /// </summary>

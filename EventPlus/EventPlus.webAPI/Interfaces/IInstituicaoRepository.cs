@@ -1,4 +1,6 @@
-﻿using EventPlus.webAPI.Models;
+﻿using EventPlus.webAPI.Controllers;
+using EventPlus.webAPI.DTO;
+using EventPlus.webAPI.Models;
 namespace EventPlus.webAPI.Interfaces;
 
 public interface IInstituicaoRepository

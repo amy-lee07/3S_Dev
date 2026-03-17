@@ -1,4 +1,7 @@
-﻿using EventPlus.webAPI.BdContextEvent;
+﻿
+using EventPlus.webAPI.BdContextEvent;
+using EventPlus.webAPI.Controllers;
+using EventPlus.webAPI.DTO;
 using EventPlus.webAPI.Interfaces;
 using EventPlus.webAPI.Models;
 
@@ -22,12 +25,17 @@ public class InstituicaoRepository : IInstituicaoRepository
         var InstituicaoBuscada = _context.Instituicaos.Find(id);
         if (InstituicaoBuscada != null)
         {
-            InstituicaoBuscada.NomeFantasia = instituicao.NomeFantasia;
-            InstituicaoBuscada.Cnpj = instituicao.Cnpj;
-            InstituicaoBuscada.Endereco = instituicao.Endereco;
+            InstituicaoBuscada.NomeFantasia = String.IsNullOrWhiteSpace(instituicao.NomeFantasia) ? InstituicaoBuscada.NomeFantasia
+                :instituicao.NomeFantasia;
+            InstituicaoBuscada.Cnpj = String.IsNullOrWhiteSpace(instituicao.Cnpj) ? InstituicaoBuscada.Cnpj
+                : instituicao.Cnpj;
+            InstituicaoBuscada.Endereco = String.IsNullOrWhiteSpace(instituicao.Endereco) ? InstituicaoBuscada.Endereco 
+                : instituicao.Endereco;
             _context.SaveChanges();
         }
     }
+
+
     /// <summary>
     /// Busca uma instituicao por id, rastreamento automatico
     /// </summary>
@@ -71,3 +79,4 @@ public class InstituicaoRepository : IInstituicaoRepository
         return _context.Instituicaos.OrderBy(instituicao => instituicao.NomeFantasia).ToList();    
     }
 }
+

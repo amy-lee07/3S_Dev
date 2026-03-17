@@ -1,76 +1,82 @@
-﻿using EventPlus.webAPI.BdContextEvent;
-using EventPlus.webAPI.Interfaces;
-using EventPlus.webAPI.Models;
-using Microsoft.EntityFrameworkCore;
+﻿
 
-namespace EventPlus.webAPI.Repositories;
+using EventPlus.webAPI.BdContextEvent;
+using EventPlus.webAPI.Models;
+using EventPlus.WebAPI.Interfaces;
+
+namespace EventPlus.WebAPI.Repositories;
 
 public class TipoUsuarioRepository : ITipoUsuarioRepository
 {
     private readonly EventContext _context;
 
+    // Injeção de Dependência: Recebe o contexto pelo construtor
     public TipoUsuarioRepository(EventContext context)
     {
         _context = context;
     }
 
-
     /// <summary>
-    /// Atualiza um tipo de usuario rastreamento automatico
+    /// Atualiza um tipo de usuário usando o Change Tracking do EF
     /// </summary>
-    /// <param name="Id"></param>
-    /// <param name="tipoUsuario"></param>
-
-    public void Atualizar(Guid id, TipoUsuario tipoUsuario)
+    /// <param name="id">Id do tipo usuario a ser atualizado</param>
+    /// <param name="TipoUsuario">Novos dados do tipo usuario</param>
+    public void Atualizar(Guid id, TipoUsuario TipoUsuario)
     {
-        var tipoUsuarioBuscado = _context.TipoUsuarios.Find(id);
-        if (tipoUsuarioBuscado != null)
+        // Ao buscar com Find, o objeto já entra no radar do EF
+        var tipoBuscado = _context.TipoUsuarios.Find(id);
+
+        if (tipoBuscado != null)
         {
-            tipoUsuarioBuscado.Titulo = tipoUsuario.Titulo;
+            tipoBuscado.Titulo = TipoUsuario.Titulo;
+
+            // Não precisa de .Update(), o SaveChanges detecta a alteração no Titulo
             _context.SaveChanges();
         }
     }
 
-    public TipoEvento BuscarPorId(Guid id)
+    /// <summary>
+    /// Busca um tipo de usuário por id
+    /// </summary>
+    /// <param name="id">id do tipo usuário a ser buscado</param>
+    /// <returns>Objeto do tipoUsuario com as informações do tipo de usuario buscado</returns>
+    public TipoUsuario BuscarPorId(Guid id)
     {
-        throw new NotImplementedException();
+        return _context.TipoUsuarios.Find(id)!;
     }
 
-
     /// <summary>
-    /// cadastra um novo tipo de usuario
+    /// Cadastra um novo tipo de usuario
     /// </summary>
-    /// <param name="tipoUsuario">tipo de usuario a ser cadastrado</param>
-    public void Cadastrar(TipoUsuario tipoUsuario)
+    /// <param name="TipoUsuario">tipo de usuario a ser cadastrado</param>
+    public void Cadastrar(TipoUsuario TipoUsuario)
     {
-        _context.TipoUsuarios.Add(tipoUsuario);
+        _context.TipoUsuarios.Add(TipoUsuario);
         _context.SaveChanges();
     }
+
     /// <summary>
-    /// deleta um tipo de usuario 
+    /// Deleta um tipo de usuario
     /// </summary>
     /// <param name="id">id do tipo usuario a ser deletado</param>
     public void Deletar(Guid id)
     {
-        var tipoUsuarioBuscado = _context.TipoUsuarios.Find(id);
-        if (tipoUsuarioBuscado != null)
+        var tipoBuscado = _context.TipoUsuarios.Find(id);
+
+        if (tipoBuscado != null)
         {
-            _context.TipoUsuarios.Remove(tipoUsuarioBuscado);
+            _context.TipoUsuarios.Remove(tipoBuscado);
             _context.SaveChanges();
         }
     }
 
     /// <summary>
-    /// busca a lista de tipos de usuarios cadastrados
+    /// Busca a lista de tipo de usuario cadastrado
     /// </summary>
-    /// <returns>uma lista de tipo usuarios</returns>
+    /// <returns>Uma lista de tipo usuario</returns>
     public List<TipoUsuario> Listar()
     {
-        return _context.TipoUsuarios.OrderBy(tipoUsuario => tipoUsuario.Titulo).ToList();
+        return _context.TipoUsuarios.ToList();
     }
 
-    TipoUsuario ITipoUsuarioRepository.BuscarPorId(Guid id)
-    {
-        return _context.TipoUsuarios.Find(id)!;
-    }
 }

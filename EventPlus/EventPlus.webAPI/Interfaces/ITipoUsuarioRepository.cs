@@ -1,12 +1,12 @@
 ﻿using EventPlus.webAPI.Models;
-namespace EventPlus.webAPI.Interfaces;
+
+namespace EventPlus.WebAPI.Interfaces;
 
 public interface ITipoUsuarioRepository
 {
-    List<TipoUsuario> Listar();
     void Cadastrar(TipoUsuario tipoUsuario);
-    void Atualizar(Guid id, TipoUsuario tipoUsuario);
     void Deletar(Guid id);
-  
+    List<TipoUsuario> Listar();
     TipoUsuario BuscarPorId(Guid id);
+    void Atualizar(Guid id, TipoUsuario tipoUsuario);
 }

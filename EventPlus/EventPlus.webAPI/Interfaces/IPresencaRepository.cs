@@ -1,4 +1,5 @@
 ﻿using EventPlus.webAPI.Models;
+
 namespace EventPlus.webAPI.Interfaces;
 
 public interface IPresencaRepository

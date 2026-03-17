@@ -1,9 +1,10 @@
 ﻿using EventPlus.webAPI.Models;
-namespace EventPlus.webAPI.Interfaces;
+
+namespace EventPlus.WebAPI.Interfaces;
 
 public interface IUsuarioRepository
 {
     void Cadastrar(Usuario usuario);
-    Usuario BuscarPorId (Guid id);
-    Usuario BuscarPorEmailESenha (string Email, string Senha);
+    Usuario BuscarPorId(Guid IdUsuario);
+    Usuario BuscarPorEmailESenha(string Email, string Senha);
 }
