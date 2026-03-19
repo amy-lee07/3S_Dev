@@ -1,24 +1,67 @@
-using EventPlus.webAPI.BdContextEvent;
+ï»¿using EventPlus.webAPI.BdContextEvent;
 using EventPlus.webAPI.Interfaces;
 using EventPlus.webAPI.Repositories;
 using EventPlus.WebAPI.Interfaces;
 using EventPlus.WebAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<EventContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 1. Configurar o Contexto do Banco de Dados
-builder.Services.AddDbContext<EventContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddControllers();
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
 
-//2. Registrar as Repositories (Injeção de Dependência)
+//Registrar as Repositories (Injeï¿½ï¿½o de Dependï¿½ncia)
 builder.Services.AddScoped<ITipoEventoRepository, TipoEventoRepository>();
 builder.Services.AddScoped<ITipoUsuarioRepository, TipoUsuarioRepository>();
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IInstituicaoRepository, InstituicaoRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IEventoRepository, EventoRepository>();
+builder.Services.AddScoped<IPresencaRepository, PresencaRepository>();
 
-//Adiciona Swagger
+// Adiciona serviï¿½o de Jwt Bearer (forma de autenticaï¿½ï¿½o)
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultChallengeScheme = "JwtBearer";
+    options.DefaultAuthenticateScheme = "JwtBearer";
+})
+
+.AddJwtBearer("JwtBearer", options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        //valida quem estï¿½ solicitando
+        ValidateIssuer = true,
+
+        //valida quem estï¿½ recebendo
+        ValidateAudience = true,
+
+        //define se o tempo de expiraï¿½ï¿½o serï¿½ validado
+        ValidateLifetime = true,
+
+        //forma de criptografia e valida a chave de autenticaï¿½ï¿½o
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes
+        ("eventos-chave-autenticacao-webapi-dev")),
+
+        //valida o tempo de expiraï¿½ï¿½o do token
+        ClockSkew = TimeSpan.FromMinutes(5),
+
+        //nome do issuer (de onde estï¿½ vindo)
+        ValidIssuer = "api_event",
+
+        //nome do audience (para onde ele estï¿½ indo)
+        ValidAudience = "api_event"
+    };
+});
+
+builder.Services.AddEndpointsApiExplorer();
+
+// Adiciona Swagger
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
@@ -26,22 +69,22 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "Api de Eventos",
-        Description = "Aplicação para gerenciamento de eventos",
-        TermsOfService = new Uri("https://example.com/terms"),
+        Title = "API de Eventos",
+        Description = "Aplicaï¿½ï¿½o para gerenciamento de eventos",
+        TermsOfService = new Uri("https://example.com.terms"),
         Contact = new OpenApiContact
         {
-            Name = "Amy Lee",
-            Url = new Uri("https://github.com/amy-lee07")
+            Name = "Davi Muniz",
+            Url = new Uri("https://github.com/davizqk")
         },
         License = new OpenApiLicense
         {
-            Name = "Licensa de Exemplo",
+            Name = "Exemplo de licensa",
             Url = new Uri("https://example.com/license")
         }
     });
 
-    //Usando a autenticação no Swagger
+    //Usando a autenticaï¿½ï¿½o no swagger
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -49,7 +92,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Insira o token JWT:"
+        Description = "Insira o token: "
     });
 
     options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
@@ -58,8 +101,9 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// Adiciona o serviï¿½o de Controllers
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -73,7 +117,7 @@ if (app.Environment.IsDevelopment())
 
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        options.SwaggerEndpoint("swagger/v1/swagger.json", "v1");
         options.RoutePrefix = string.Empty;
     });
 }
@@ -82,6 +126,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+//adiciona o mapeamento de Controllers
 app.MapControllers();
 
 app.Run();

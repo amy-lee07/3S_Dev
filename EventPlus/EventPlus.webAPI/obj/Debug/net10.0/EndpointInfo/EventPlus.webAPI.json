@@ -1,15 +1,15 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "Api de Eventos",
-    "description": "Aplicação para gerenciamento de eventos",
-    "termsOfService": "https://example.com/terms",
+    "title": "API de Eventos",
+    "description": "Aplica��o para gerenciamento de eventos",
+    "termsOfService": "https://example.com.terms",
     "contact": {
-      "name": "Amy Lee",
-      "url": "https://github.com/amy-lee07"
+      "name": "Davi Muniz",
+      "url": "https://github.com/davizqk"
     },
     "license": {
-      "name": "Licensa de Exemplo",
+      "name": "Exemplo de licensa",
       "url": "https://example.com/license"
     },
     "version": "v1"
@@ -320,6 +320,144 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/LoginDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Presenca/{id}": {
+      "get": {
+        "tags": [
+          "Presenca"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Presenca"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Presenca"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresencaDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresencaDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresencaDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Presenca/ListarMinhas/{idUsuario}": {
+      "get": {
+        "tags": [
+          "Presenca"
+        ],
+        "parameters": [
+          {
+            "name": "idUsuario",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Presenca": {
+      "post": {
+        "tags": [
+          "Presenca"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresencaDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresencaDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresencaDTO"
               }
             }
           }
@@ -706,6 +844,25 @@
         },
         "additionalProperties": false
       },
+      "PresencaDTO": {
+        "type": "object",
+        "properties": {
+          "situacao": {
+            "type": "boolean"
+          },
+          "idUsuario": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "idEvento": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "TipoEventoDTO": {
         "required": [
           "titulo"
@@ -759,7 +916,7 @@
     "securitySchemes": {
       "Bearer": {
         "type": "http",
-        "description": "Insira o token JWT:",
+        "description": "Insira o token: ",
         "scheme": "Bearer",
         "bearerFormat": "JWT"
       }
@@ -779,6 +936,9 @@
     },
     {
       "name": "Login"
+    },
+    {
+      "name": "Presenca"
     },
     {
       "name": "TipoEvento"

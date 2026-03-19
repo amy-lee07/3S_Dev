@@ -1,14 +1,13 @@
 ﻿using EventPlus.webAPI.Models;
 
-namespace EventPlus.webAPI.Interfaces;
+namespace EventPlus.WebAPI.Interfaces;
 
 public interface IPresencaRepository
 {
-     void Inscrever (Presenca Incricao);
+    void Inscrever(Presenca Inscricao);
     void Deletar(Guid id);
     List<Presenca> Listar();
     Presenca BuscarPorId(Guid id);
-    void Atualizar(Guid Id);
+    void Atualizar(Guid id, Presenca presenca);
     List<Presenca> ListarMinhas(Guid IdUsuario);
-    
 }

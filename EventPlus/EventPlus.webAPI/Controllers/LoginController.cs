@@ -39,7 +39,9 @@ public class LoginController : ControllerBase
 
                 new Claim(JwtRegisteredClaimNames.Email, usuarioBuscado.Email!),
 
-                new Claim(JwtRegisteredClaimNames.Typ, usuarioBuscado.IdTipoUsuarioNavigation!.Titulo),
+                new Claim(JwtRegisteredClaimNames.Name, usuarioBuscado.Nome!),
+
+                new Claim(ClaimTypes.Role, usuarioBuscado.IdTipoUsuarioNavigation!.Titulo!),
             };
 
             // 2º - Definir a chave de acesso ao token
