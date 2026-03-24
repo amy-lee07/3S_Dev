@@ -9,11 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
-var endpoint = "https://moderatorservice-marcos.cognitiveservices.azure.com/";
-var apiKey = "2iaH91mex87bsPAp5fNFvThggEkT4YEljiXPr5R35iWwJtAb0tTQJQQJ99CCACYeBjFXJ3w3AAAHACOGqrCt";
-var client = new ContentSafetyClient(new Uri (endpoint), new Azure. AzureKeyCredential(apiKey));
-
-builder.Services.AddSingleton(client);
 
 builder.Services.AddDbContext<EventContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
