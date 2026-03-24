@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventPlus.webAPI.Repositories;
 
-public class ComentarioEventoReposity : IComentarioEventoRepository
+public class ComentarioEventoRepository : IComentarioEventoRepository
 {
     private readonly EventContext _eventContext;
-    public ComentarioEventoReposity(EventContext context)
+    public ComentarioEventoRepository(EventContext context)
     {
         _eventContext = context;
     }
@@ -38,7 +38,7 @@ public class ComentarioEventoReposity : IComentarioEventoRepository
     
     public List<ComentarioEvento> Listar(Guid IdEvento)
     {
-        return _eventContext.ComentarioEvento
+        return _eventContext.ComentarioEventos
             .OrderBy(ComentarioEvento => ComentarioEvento.Descricao)
             .ToList();
     }

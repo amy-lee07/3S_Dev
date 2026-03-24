@@ -1,4 +1,5 @@
-﻿using EventPlus.webAPI.BdContextEvent;
+﻿using Azure.AI.ContentSafety;
+using EventPlus.webAPI.BdContextEvent;
 using EventPlus.webAPI.Interfaces;
 using EventPlus.webAPI.Repositories;
 using EventPlus.WebAPI.Interfaces;
@@ -8,6 +9,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
+var endpoint = "https://moderatorservice-marcos.cognitiveservices.azure.com/";
+var apiKey = "2iaH91mex87bsPAp5fNFvThggEkT4YEljiXPr5R35iWwJtAb0tTQJQQJ99CCACYeBjFXJ3w3AAAHACOGqrCt";
+var client = new ContentSafetyClient(new Uri (endpoint), new Azure. AzureKeyCredential(apiKey));
+
+builder.Services.AddSingleton(client);
 
 builder.Services.AddDbContext<EventContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -16,13 +22,14 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-//Registrar as Repositories (Inje��o de Depend�ncia)
-builder.Services.AddScoped<ITipoEventoRepository, TipoEventoRepository>();
+//Registrar as Repositories (Inje��o de Depend�ncia)builder.Services.AddScoped<ITipoEventoRepository, TipoEventoRepository>();
 builder.Services.AddScoped<ITipoUsuarioRepository, TipoUsuarioRepository>();
 builder.Services.AddScoped<IInstituicaoRepository, InstituicaoRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IEventoRepository, EventoRepository>();
 builder.Services.AddScoped<IPresencaRepository, PresencaRepository>();
+builder.Services.AddScoped<IComentarioEventoRepository, ComentarioEventoRepository>();
+
 
 // Adiciona servi�o de Jwt Bearer (forma de autentica��o)
 builder.Services.AddAuthentication(options =>
